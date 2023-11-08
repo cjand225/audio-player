@@ -1,8 +1,8 @@
-# Media Player Application
+# Audio Player Application
 
 ## Description
 
-The Media Player is a lightweight, easy-to-use desktop application for playing audio files. It's built with Java using the Swing library, providing a simple graphical user interface for basic audio playback functions. This application currently supports only audio playback and is a straightforward, no-frills media player.
+The Audio Player is a lightweight, easy-to-use desktop application for playing audio files. It's built with Java using the Swing library, providing a simple graphical user interface for basic audio playback functions. This application currently supports only audio playback and is a straightforward, no-frills audio player.
 
 ## Features
 
