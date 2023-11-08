@@ -1,6 +1,10 @@
 import javax.swing.*;
 import java.io.File;
 
+/**
+ * The view is responsible for displaying the user interface and capturing
+ * user interactions, delegating the actual business logic to the controller.
+ */
 public class AudioPlayerView extends JFrame {
     private AudioPlayerController controller;
     private JButton playButton;
@@ -10,11 +14,20 @@ public class AudioPlayerView extends JFrame {
     private JButton rewindButton;
     private JButton openFileButton;
 
+    /**
+     * Constructor that initializes the view with a reference to the controller.
+     *
+     * @param controller The controller that handles business logic for the audio
+     *                   player.
+     */
     public AudioPlayerView(AudioPlayerController controller) {
         this.controller = controller;
         initUI();
     }
 
+    /**
+     * Initializes the user interface components and layouts.
+     */
     private void initUI() {
         setTitle("Audio Player");
         setSize(300, 200);
@@ -53,6 +66,10 @@ public class AudioPlayerView extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Opens a file chooser dialog to select an audio file and instructs the
+     * controller to load the selected file.
+     */
     private void openFile() {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(this);
