@@ -23,7 +23,7 @@ The Media Player is a lightweight, easy-to-use desktop application for playing a
 
 To run the Media Player application, you need to have the following installed:
 
-- Java Runtime Environment (JRE) 8 or later
+- Java Runtime Environment (JRE) 21 or later
 
 ### Installation
 
