@@ -34,7 +34,7 @@ To set up the Media Player app, follow these steps:
 3. Run the application with the following command:
 
 ```sh
-java -jar MediaPlayer.jar
+java -jar AudioPlayer.jar
 ```
 
 ### Usage
