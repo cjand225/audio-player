@@ -2,12 +2,15 @@ package com.audio.player;
 
 import javax.swing.*;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The view is responsible for displaying the user interface and capturing
  * user interactions, delegating the actual business logic to the controller.
  */
 public class AudioPlayerView extends JFrame {
+    private static final Logger LOGGER = Logger.getLogger(AudioPlayerView.class.getName());
     private AudioPlayerController controller;
     private JButton playButton;
     private JButton pauseButton;
@@ -77,7 +80,10 @@ public class AudioPlayerView extends JFrame {
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
+            LOGGER.log(Level.INFO, "Selected file: {0}", selectedFile.getAbsolutePath());
             controller.loadFile(selectedFile);
+        } else if (result == JFileChooser.CANCEL_OPTION) {
+            LOGGER.fine("File selection cancelled by user.");
         }
     }
 }
