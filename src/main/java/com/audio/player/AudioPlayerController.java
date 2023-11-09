@@ -34,7 +34,6 @@ public class AudioPlayerController {
             LOGGER.info("Loaded audio file: " + file.getName());
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error loading audio file: " + file.getName(), e);
-            // Handle exceptions here, possibly sending error messages back to the View
         }
     }
 
