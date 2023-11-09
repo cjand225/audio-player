@@ -1,3 +1,5 @@
+package com.audio.player;
+
 import javax.swing.SwingUtilities;
 
 public class Main {
