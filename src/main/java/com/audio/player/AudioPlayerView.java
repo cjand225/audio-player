@@ -39,21 +39,21 @@ public class AudioPlayerView extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        playButton = new JButton("Play");
-        pauseButton = new JButton("Pause");
-        stopButton = new JButton("Stop");
-        fastForwardButton = new JButton("Fast Forward");
-        rewindButton = new JButton("Rewind");
-        openFileButton = new JButton("Open File");
+        playButton = createIconButton("play.png", "Play");
+        pauseButton = createIconButton("pause.png", "Pause");
+        stopButton = createIconButton("stop.png", "Stop");
+        fastForwardButton = createIconButton("fast_forward.png", "Fast Forward");
+        rewindButton = createIconButton("rewind.png", "Rewind");
+        openFileButton = createIconButton("open_file.png", "Open File");
 
         // Layout for buttons
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(openFileButton);
+        buttonPanel.add(rewindButton);
         buttonPanel.add(playButton);
         buttonPanel.add(pauseButton);
         buttonPanel.add(stopButton);
         buttonPanel.add(fastForwardButton);
-        buttonPanel.add(rewindButton);
 
         // Action Listeners
         openFileButton.addActionListener(e -> openFile());
@@ -86,4 +86,44 @@ public class AudioPlayerView extends JFrame {
             LOGGER.fine("File selection cancelled by user.");
         }
     }
+
+    /**
+     * Creates a JButton with an icon and tooltip. If the icon cannot be loaded,
+     * the button will display the tooltip text instead.
+     *
+     * @param iconName The name of the icon file to be used as the button image.
+     * @param toolTip  The text to be displayed when the mouse hovers over the
+     *                 button.
+     * @return A JButton instance with either an icon or text label.
+     */
+    private JButton createIconButton(String iconName, String toolTip) {
+        String iconPath = "/icons/" + iconName;
+        ImageIcon icon = null;
+        try {
+            java.net.URL imgUrl = getClass().getResource(iconPath);
+            if (imgUrl != null) {
+                icon = new ImageIcon(imgUrl);
+            } else {
+                LOGGER.log(Level.WARNING, "Icon resource not found: {0}", iconPath);
+            }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error loading icon: " + iconPath, e);
+        }
+
+        JButton button = new JButton();
+        if (icon != null) {
+            button.setIcon(icon);
+        } else {
+            // Fallback to text if the icon cannot be loaded
+            button.setText(toolTip);
+            LOGGER.log(Level.INFO, "Using text as fallback for missing icon: {0}", toolTip);
+        }
+
+        button.setToolTipText(toolTip);
+        button.setBorderPainted(false);
+        button.setContentAreaFilled(false);
+        button.setFocusPainted(false);
+        return button;
+    }
+
 }
