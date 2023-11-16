@@ -1,7 +1,6 @@
 package com.audio.player;
 
 import javax.swing.*;
-import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,7 +16,6 @@ public class AudioPlayerView extends JFrame {
     private JButton stopButton;
     private JButton fastForwardButton;
     private JButton rewindButton;
-    private JButton openFileButton;
 
     /**
      * Constructor that initializes the view with a reference to the controller.
@@ -44,11 +42,15 @@ public class AudioPlayerView extends JFrame {
         stopButton = createIconButton("stop.png", "Stop");
         fastForwardButton = createIconButton("fast_forward.png", "Fast Forward");
         rewindButton = createIconButton("rewind.png", "Rewind");
-        openFileButton = createIconButton("open_file.png", "Open File");
+
+        // Create and add the menu bar
+        JMenuBar menuBar = new JMenuBar();
+        FileMenu fileMenu = new FileMenu(controller);
+        menuBar.add(fileMenu);
+        setJMenuBar(menuBar);
 
         // Layout for buttons
         JPanel buttonPanel = new JPanel();
-        buttonPanel.add(openFileButton);
         buttonPanel.add(rewindButton);
         buttonPanel.add(playButton);
         buttonPanel.add(pauseButton);
@@ -56,7 +58,6 @@ public class AudioPlayerView extends JFrame {
         buttonPanel.add(fastForwardButton);
 
         // Action Listeners
-        openFileButton.addActionListener(e -> openFile());
         playButton.addActionListener(e -> controller.play());
         pauseButton.addActionListener(e -> controller.pause());
         stopButton.addActionListener(e -> controller.stop());
@@ -69,22 +70,6 @@ public class AudioPlayerView extends JFrame {
         // Pack and set visible
         pack();
         setVisible(true);
-    }
-
-    /**
-     * Opens a file chooser dialog to select an audio file and instructs the
-     * controller to load the selected file.
-     */
-    private void openFile() {
-        JFileChooser fileChooser = new JFileChooser();
-        int result = fileChooser.showOpenDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            LOGGER.log(Level.INFO, "Selected file: {0}", selectedFile.getAbsolutePath());
-            controller.loadFile(selectedFile);
-        } else if (result == JFileChooser.CANCEL_OPTION) {
-            LOGGER.fine("File selection cancelled by user.");
-        }
     }
 
     /**
