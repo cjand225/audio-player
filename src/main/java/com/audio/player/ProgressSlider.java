@@ -37,7 +37,7 @@ public class ProgressSlider extends JPanel {
      * Initializes the slider component, configuring its properties and layout.
      */
     private void init() {
-        LOGGER.info("Initializing ProgressSlider");
+        LOGGER.log(Level.INFO, "Initializing ProgressSlider");
 
         this.setLayout(new BorderLayout());
 

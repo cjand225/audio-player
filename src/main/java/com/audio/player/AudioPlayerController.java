@@ -31,7 +31,7 @@ public class AudioPlayerController {
     public void loadFile(File file) {
         try {
             model.openFile(file);
-            LOGGER.info("Loaded audio file: " + file.getName());
+            LOGGER.log(Level.INFO, "Loaded audio file: " + file.getName());
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error loading audio file: " + file.getName(), e);
         }
@@ -43,9 +43,9 @@ public class AudioPlayerController {
     public void play() {
         if (isClipLoaded()) {
             model.play();
-            LOGGER.info("Playback started.");
+            LOGGER.log(Level.INFO, "Playback started.");
         } else {
-            LOGGER.warning("Playback attempted without a loaded audio clip.");
+            LOGGER.log(Level.WARNING, "Playback attempted without a loaded audio clip.");
         }
     }
 
@@ -55,9 +55,9 @@ public class AudioPlayerController {
     public void pause() {
         if (isClipLoaded()) {
             model.pause();
-            LOGGER.info("Playback paused.");
+            LOGGER.log(Level.INFO, "Playback paused.");
         } else {
-            LOGGER.warning("Pause attempted without a loaded audio clip.");
+            LOGGER.log(Level.WARNING, "Pause attempted without a loaded audio clip.");
         }
     }
 
@@ -67,9 +67,9 @@ public class AudioPlayerController {
     public void stop() {
         if (isClipLoaded()) {
             model.stop();
-            LOGGER.info("Playback stopped and reset.");
+            LOGGER.log(Level.INFO, "Playback stopped and reset.");
         } else {
-            LOGGER.warning("Stop attempted without a loaded audio clip.");
+            LOGGER.log(Level.WARNING, "Stop attempted without a loaded audio clip.");
         }
     }
 
@@ -81,9 +81,9 @@ public class AudioPlayerController {
     public void fastForward(long amount) {
         if (isClipLoaded()) {
             model.fastForward(amount);
-            LOGGER.info("Fast forwarded playback by " + amount + " microseconds.");
+            LOGGER.log(Level.INFO, "Fast forwarded playback by " + amount + " microseconds.");
         } else {
-            LOGGER.warning("Fast forward attempted without a loaded audio clip.");
+            LOGGER.log(Level.WARNING, "Fast forward attempted without a loaded audio clip.");
         }
     }
 
@@ -95,9 +95,9 @@ public class AudioPlayerController {
     public void rewind(long amount) {
         if (isClipLoaded()) {
             model.rewind(amount);
-            LOGGER.info("Rewound playback by " + amount + " microseconds.");
+            LOGGER.log(Level.INFO, "Rewound playback by " + amount + " microseconds.");
         } else {
-            LOGGER.warning("Rewind attempted without a loaded audio clip.");
+            LOGGER.log(Level.WARNING, "Rewind attempted without a loaded audio clip.");
         }
     }
 
@@ -109,9 +109,9 @@ public class AudioPlayerController {
     public void setPlaybackPosition(long position) {
         if (isClipLoaded()) {
             model.setClipPosition(position);
-            LOGGER.info("Set playback position to " + position + " microseconds.");
+            LOGGER.log(Level.INFO, "Set playback position to " + position + " microseconds.");
         } else {
-            LOGGER.warning("Setting playback position attempted without a loaded audio clip.");
+            LOGGER.log(Level.WARNING, "Setting playback position attempted without a loaded audio clip.");
         }
     }
 
@@ -123,10 +123,10 @@ public class AudioPlayerController {
     public long getPlaybackPosition() {
         if (isClipLoaded()) {
             long position = model.getClipCurrentTime();
-            LOGGER.fine("Retrieved current playback position: " + position);
+            LOGGER.log(Level.INFO, "Retrieved current playback position: " + position);
             return position;
         } else {
-            LOGGER.warning("Retrieving playback position attempted without a loaded audio clip.");
+            LOGGER.log(Level.WARNING, "Retrieving playback position attempted without a loaded audio clip.");
             return 0;
         }
     }
@@ -139,10 +139,10 @@ public class AudioPlayerController {
     public long getClipDuration() {
         if (isClipLoaded()) {
             long duration = model.getClipDuration();
-            LOGGER.fine("Retrieved audio clip duration: " + duration);
+            LOGGER.log(Level.INFO, "Retrieved audio clip duration: " + duration);
             return duration;
         } else {
-            LOGGER.warning("Retrieving clip duration attempted without a loaded audio clip.");
+            LOGGER.log(Level.WARNING, "Retrieving clip duration attempted without a loaded audio clip.");
             return 0;
         }
     }
@@ -154,7 +154,7 @@ public class AudioPlayerController {
      */
     public boolean isPlaying() {
         boolean playing = model.isPlaying();
-        LOGGER.fine("Playback is " + (playing ? "currently" : "not") + " playing.");
+        LOGGER.log(Level.INFO, "Playback is " + (playing ? "currently" : "not") + " playing.");
         return playing;
     }
 

@@ -21,7 +21,7 @@ public class AudioPlayer {
      * Constructs a new AudioPlayer instance.
      */
     public AudioPlayer() {
-        LOGGER.info("AudioPlayer instance created");
+        LOGGER.log(Level.INFO, "AudioPlayer instance created");
     }
 
     /**
@@ -37,12 +37,12 @@ public class AudioPlayer {
         if (clip != null) {
             closeClip();
         }
-        LOGGER.info("Opening audio file: " + file.getName());
+        LOGGER.log(Level.INFO, "Opening audio file: " + file.getName());
         audioStream = AudioSystem.getAudioInputStream(file);
         DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
         clip = (Clip) AudioSystem.getLine(info);
         clip.open(audioStream);
-        LOGGER.info("Audio file opened and ready for playback");
+        LOGGER.log(Level.INFO, "Audio file opened and ready for playback");
     }
 
     /**
@@ -51,7 +51,7 @@ public class AudioPlayer {
     public void play() {
         if (clip != null) {
             clip.start();
-            LOGGER.info("Playback started");
+            LOGGER.log(Level.INFO, "Playback started");
         }
     }
 
@@ -61,7 +61,7 @@ public class AudioPlayer {
     public void pause() {
         if (clip != null) {
             clip.stop();
-            LOGGER.info("Playback paused");
+            LOGGER.log(Level.INFO, "Playback paused");
         }
     }
 
@@ -72,7 +72,7 @@ public class AudioPlayer {
         if (clip != null) {
             clip.stop();
             clip.setMicrosecondPosition(0);
-            LOGGER.info("Playback stopped and reset");
+            LOGGER.log(Level.INFO, "Playback stopped and reset");
         }
     }
 
@@ -85,7 +85,7 @@ public class AudioPlayer {
         if (clip != null) {
             long newPosition = Math.min(clip.getMicrosecondPosition() + microseconds, clip.getMicrosecondLength());
             clip.setMicrosecondPosition(newPosition);
-            LOGGER.info("Fast forward by " + microseconds + " microseconds");
+            LOGGER.log(Level.INFO, "Fast forward by " + microseconds + " microseconds");
         }
     }
 
@@ -98,7 +98,7 @@ public class AudioPlayer {
         if (clip != null) {
             long newPosition = Math.max(clip.getMicrosecondPosition() - microseconds, 0);
             clip.setMicrosecondPosition(newPosition);
-            LOGGER.info("Rewind by " + microseconds + " microseconds");
+            LOGGER.log(Level.INFO, "Rewind by " + microseconds + " microseconds");
         }
     }
 
@@ -108,7 +108,7 @@ public class AudioPlayer {
     public void begin() {
         if (clip != null) {
             clip.setMicrosecondPosition(0);
-            LOGGER.info("Playback position moved to the beginning");
+            LOGGER.log(Level.INFO, "Playback position moved to the beginning");
         }
     }
 
@@ -118,7 +118,7 @@ public class AudioPlayer {
     public void end() {
         if (clip != null) {
             clip.setMicrosecondPosition(clip.getMicrosecondLength());
-            LOGGER.info("Playback position moved to the end");
+            LOGGER.log(Level.INFO, "Playback position moved to the end");
         }
     }
 
@@ -158,7 +158,7 @@ public class AudioPlayer {
     public void setClipPosition(long position) {
         if (clip != null) {
             clip.setMicrosecondPosition(position);
-            LOGGER.info("Playback position set to " + position + " microseconds");
+            LOGGER.log(Level.INFO, "Playback position set to " + position + " microseconds");
         }
     }
 
@@ -188,13 +188,13 @@ public class AudioPlayer {
         if (clip != null) {
             clip.stop();
             clip.close();
-            LOGGER.info("Clip closed");
+            LOGGER.log(Level.INFO, "Clip closed");
             clip = null;
         }
         if (audioStream != null) {
             try {
                 audioStream.close();
-                LOGGER.info("Audio stream closed");
+                LOGGER.log(Level.INFO, "Audio stream closed");
             } catch (IOException e) {
                 LOGGER.log(Level.WARNING, "Failed to close audio stream", e);
             }

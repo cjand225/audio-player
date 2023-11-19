@@ -36,7 +36,7 @@ public class FileMenu extends JMenu {
 
         JMenuItem exitItem = new JMenuItem("Exit");
         exitItem.addActionListener(e -> {
-            LOGGER.info("Exiting application");
+            LOGGER.log(Level.INFO, "Exiting application");
             System.exit(0);
         });
         add(exitItem);
@@ -60,7 +60,7 @@ public class FileMenu extends JMenu {
             LOGGER.log(Level.INFO, "Selected file: {0}", selectedFile.getAbsolutePath());
             controller.loadFile(selectedFile);
         } else if (result == JFileChooser.CANCEL_OPTION) {
-            LOGGER.fine("File selection cancelled by user.");
+            LOGGER.log(Level.FINE, "File selection cancelled by user.");
         }
     }
 }
