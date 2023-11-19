@@ -1,6 +1,7 @@
 package com.audio.player;
 
 import javax.swing.*;
+import java.awt.BorderLayout;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,6 +17,7 @@ public class AudioPlayerView extends JFrame {
     private JButton stopButton;
     private JButton fastForwardButton;
     private JButton rewindButton;
+    private ProgressSlider progressSlider;
 
     /**
      * Constructor that initializes the view with a reference to the controller.
@@ -43,6 +45,9 @@ public class AudioPlayerView extends JFrame {
         fastForwardButton = createIconButton("fast_forward.png", "Fast Forward");
         rewindButton = createIconButton("rewind.png", "Rewind");
 
+        // Initialize the slider
+        progressSlider = new ProgressSlider(controller);
+
         // Create and add the menu bar
         JMenuBar menuBar = new JMenuBar();
         FileMenu fileMenu = new FileMenu(controller);
@@ -57,15 +62,20 @@ public class AudioPlayerView extends JFrame {
         buttonPanel.add(stopButton);
         buttonPanel.add(fastForwardButton);
 
+        // Layout for Overall
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(progressSlider, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
         // Action Listeners
-        playButton.addActionListener(e -> controller.play());
-        pauseButton.addActionListener(e -> controller.pause());
-        stopButton.addActionListener(e -> controller.stop());
+        playButton.addActionListener(e -> playAudio());
+        pauseButton.addActionListener(e -> pauseAudio());
+        stopButton.addActionListener(e -> stopAudio());
         fastForwardButton.addActionListener(e -> controller.fastForward(5000000)); // Fast forward 5 seconds
         rewindButton.addActionListener(e -> controller.rewind(5000000)); // Rewind 5 seconds
 
-        // Add button panel to the frame
-        add(buttonPanel);
+        // Add main panel to the frame
+        add(mainPanel);
 
         // Pack and set visible
         pack();
@@ -109,6 +119,33 @@ public class AudioPlayerView extends JFrame {
         button.setContentAreaFilled(false);
         button.setFocusPainted(false);
         return button;
+    }
+
+    /**
+     * Handles the play action: starts audio playback, the playback timer, and
+     * updates the slider state.
+     */
+    private void playAudio() {
+        controller.play();
+        progressSlider.play();
+    }
+
+    /**
+     * Handles the stop action: stops audio playback, the playback timer, and
+     * updates the slider state.
+     */
+    private void stopAudio() {
+        controller.stop();
+        progressSlider.stop();
+    }
+
+    /**
+     * Handles the pause action: pauses audio playback, stops the playback timer,
+     * and updates the slider state.
+     */
+    private void pauseAudio() {
+        controller.pause();
+        progressSlider.pause();
     }
 
 }
