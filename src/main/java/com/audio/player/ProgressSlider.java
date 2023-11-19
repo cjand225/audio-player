@@ -1,7 +1,7 @@
 package com.audio.player;
 
 import java.util.logging.Logger;
-
+import java.util.logging.Level;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -71,7 +71,7 @@ public class ProgressSlider extends JPanel {
      * slider based on the current playback position.
      */
     private void startPlaybackTimer() {
-        LOGGER.info("Starting playback timer");
+        LOGGER.log(Level.INFO, "Starting playback timer");
         updateTimer = new Timer(1000, e -> updateSliderPosition());
         updateTimer.start();
     }
@@ -80,7 +80,7 @@ public class ProgressSlider extends JPanel {
      * Stops the playback timer.
      */
     private void stopPlaybackTimer() {
-        LOGGER.info("Stopping playback timer");
+        LOGGER.log(Level.INFO, "Stopping playback timer");
         if (updateTimer != null) {
             updateTimer.stop();
         }
@@ -102,7 +102,7 @@ public class ProgressSlider extends JPanel {
 
         int songDuration = (int) (controller.getClipDuration() / 1_000_000);
         int currentPositionSeconds = (int) (controller.getPlaybackPosition() / 1_000_000);
-        LOGGER.fine("Updating slider position: " + currentPositionSeconds);
+        LOGGER.log(Level.INFO, "Updating slider position: " + currentPositionSeconds);
         progressSlider.setValue(currentPositionSeconds);
 
         updateLabels(currentPositionSeconds, songDuration);
@@ -123,7 +123,7 @@ public class ProgressSlider extends JPanel {
             return;
 
         long newPositionMicroseconds = (long) progressSlider.getValue() * 1_000_000L;
-        LOGGER.fine("User updated clip position: " + newPositionMicroseconds);
+        LOGGER.log(Level.INFO, "User updated clip position: " + newPositionMicroseconds);
         controller.setPlaybackPosition(newPositionMicroseconds);
     }
 
@@ -136,7 +136,7 @@ public class ProgressSlider extends JPanel {
         boolean isLoaded = controller.isClipLoaded();
 
         if (!isLoaded) {
-            LOGGER.info("Updating slider state - No clip loaded");
+            LOGGER.log(Level.INFO, "Updating slider state - No clip loaded");
             progressSlider.setValue(0);
             progressSlider.setEnabled(false);
             updateLabels(0, 0);
@@ -149,7 +149,7 @@ public class ProgressSlider extends JPanel {
             int songDuration = (int) (controller.getClipDuration() / 1_000_000);
             int songPosition = (int) (controller.getPlaybackPosition() / 1_000_000);
 
-            LOGGER.info("Updating slider state - Clip loaded with duration: " + songDuration);
+            LOGGER.log(Level.INFO, "Updating slider state - Clip loaded with duration: " + songDuration);
 
             progressSlider.setMaximum(songDuration);
             updateLabels(songPosition, songDuration);
@@ -161,7 +161,7 @@ public class ProgressSlider extends JPanel {
      * Initiates playback, starts the playback timer, and updates the slider state.
      */
     public void play() {
-        LOGGER.info("Play command received");
+        LOGGER.log(Level.INFO, "Play command received");
         startPlaybackTimer();
         updateSliderState();
     }
@@ -170,7 +170,7 @@ public class ProgressSlider extends JPanel {
      * Pauses the playback, stops the playback timer, and updates the slider state.
      */
     public void pause() {
-        LOGGER.info("Pause command received");
+        LOGGER.log(Level.INFO, "Pause command received");
         stopPlaybackTimer();
         updateSliderState();
     }
@@ -180,7 +180,7 @@ public class ProgressSlider extends JPanel {
      * initial state, and updates the slider state.
      */
     public void stop() {
-        LOGGER.info("Stop command received");
+        LOGGER.log(Level.INFO, "Stop command received");
         stopPlaybackTimer();
         updateSliderState();
         updateSliderPosition();
