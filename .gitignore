@@ -55,3 +55,6 @@ hs_err_pid*
 /dist/
 /nbdist/
 /.nb-gradle/
+
+# Mac OS Specific
+.DS_STORE
