@@ -14,8 +14,7 @@ import java.util.logging.Logger;
 public class AudioPlayer {
 
     private static final Logger LOGGER = Logger.getLogger(AudioPlayer.class.getName());
-    private Clip clip;
-    private AudioInputStream audioStream;
+    private AudioTrack track;
 
     /**
      * Constructs a new AudioPlayer instance.
@@ -34,46 +33,58 @@ public class AudioPlayer {
      *                                       is unavailable.
      */
     public void openFile(File file) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        if (clip != null) {
-            closeClip();
+
+        String extension = getFileExtension(file);
+
+        switch (extension.toLowerCase()) {
+            case "wav":
+                track = new WavTrack();
+                track.openFile(file);
+                LOGGER.log(Level.INFO, "Audio file opened and ready for playback");
+            default:
+                throw new UnsupportedAudioFileException("Unsupported format: " + extension);
         }
-        LOGGER.log(Level.INFO, "Opening audio file: " + file.getName());
-        audioStream = AudioSystem.getAudioInputStream(file);
-        DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
-        clip = (Clip) AudioSystem.getLine(info);
-        clip.open(audioStream);
-        LOGGER.log(Level.INFO, "Audio file opened and ready for playback");
+
+    }
+
+    /**
+     * Retrieves the extension of a file.
+     *
+     * @param file The file from which to extract the extension.
+     * @return The file extension, or an empty string if the file does not have one.
+     */
+    public static String getFileExtension(File file) {
+        String fileName = file.getName();
+        int lastIndexOfDot = fileName.lastIndexOf('.');
+
+        // Check if the last dot is not the first character and there is a dot
+        if (lastIndexOfDot > 0) {
+            return fileName.substring(lastIndexOfDot + 1);
+        } else {
+            // Return an empty string if there is no extension
+            return "";
+        }
     }
 
     /**
      * Starts playback of the audio file.
      */
     public void play() {
-        if (clip != null) {
-            clip.start();
-            LOGGER.log(Level.INFO, "Playback started");
-        }
+        track.play();
     }
 
     /**
      * Pauses playback of the audio file.
      */
     public void pause() {
-        if (clip != null) {
-            clip.stop();
-            LOGGER.log(Level.INFO, "Playback paused");
-        }
+        track.pause();
     }
 
     /**
      * Stops playback of the audio file and resets to the beginning.
      */
     public void stop() {
-        if (clip != null) {
-            clip.stop();
-            clip.setMicrosecondPosition(0);
-            LOGGER.log(Level.INFO, "Playback stopped and reset");
-        }
+        track.stop();
     }
 
     /**
@@ -82,11 +93,7 @@ public class AudioPlayer {
      * @param microseconds The number of microseconds to fast forward.
      */
     public void fastForward(long microseconds) {
-        if (clip != null) {
-            long newPosition = Math.min(clip.getMicrosecondPosition() + microseconds, clip.getMicrosecondLength());
-            clip.setMicrosecondPosition(newPosition);
-            LOGGER.log(Level.INFO, "Fast forward by " + microseconds + " microseconds");
-        }
+        track.fastForward(microseconds);
     }
 
     /**
@@ -95,31 +102,7 @@ public class AudioPlayer {
      * @param microseconds The number of microseconds to rewind.
      */
     public void rewind(long microseconds) {
-        if (clip != null) {
-            long newPosition = Math.max(clip.getMicrosecondPosition() - microseconds, 0);
-            clip.setMicrosecondPosition(newPosition);
-            LOGGER.log(Level.INFO, "Rewind by " + microseconds + " microseconds");
-        }
-    }
-
-    /**
-     * Moves the playback position to the beginning of the audio stream.
-     */
-    public void begin() {
-        if (clip != null) {
-            clip.setMicrosecondPosition(0);
-            LOGGER.log(Level.INFO, "Playback position moved to the beginning");
-        }
-    }
-
-    /**
-     * Moves the playback position to the end of the audio stream.
-     */
-    public void end() {
-        if (clip != null) {
-            clip.setMicrosecondPosition(clip.getMicrosecondLength());
-            LOGGER.log(Level.INFO, "Playback position moved to the end");
-        }
+        track.rewind(microseconds);
     }
 
     /**
@@ -129,11 +112,7 @@ public class AudioPlayer {
      *         loaded.
      */
     public long getClipDuration() {
-        if (clip != null) {
-            return clip.getMicrosecondLength();
-        } else {
-            return 0;
-        }
+        return track.getDuration();
     }
 
     /**
@@ -142,11 +121,7 @@ public class AudioPlayer {
      * @return The current position in microseconds or 0 if the clip is not loaded.
      */
     public long getClipCurrentTime() {
-        if (clip != null) {
-            return clip.getMicrosecondPosition();
-        } else {
-            return 0;
-        }
+        return track.getPosition();
     }
 
     /**
@@ -156,10 +131,7 @@ public class AudioPlayer {
      *                 to.
      */
     public void setClipPosition(long position) {
-        if (clip != null) {
-            clip.setMicrosecondPosition(position);
-            LOGGER.log(Level.INFO, "Playback position set to " + position + " microseconds");
-        }
+        track.setPosition(position);
     }
 
     /**
@@ -168,7 +140,7 @@ public class AudioPlayer {
      * @return true if the audio is playing, false otherwise.
      */
     public boolean isPlaying() {
-        return clip != null && clip.isRunning();
+        return track.isPlaying();
     }
 
     /**
@@ -177,7 +149,7 @@ public class AudioPlayer {
      * @return true if the clip is loaded, false otherwise.
      */
     public boolean isLoaded() {
-        return clip != null;
+        return track.isLoaded();
     }
 
     /**
@@ -185,20 +157,6 @@ public class AudioPlayer {
      * with them.
      */
     public void closeClip() {
-        if (clip != null) {
-            clip.stop();
-            clip.close();
-            LOGGER.log(Level.INFO, "Clip closed");
-            clip = null;
-        }
-        if (audioStream != null) {
-            try {
-                audioStream.close();
-                LOGGER.log(Level.INFO, "Audio stream closed");
-            } catch (IOException e) {
-                LOGGER.log(Level.WARNING, "Failed to close audio stream", e);
-            }
-            audioStream = null;
-        }
+        track.closeFile();
     }
 }
